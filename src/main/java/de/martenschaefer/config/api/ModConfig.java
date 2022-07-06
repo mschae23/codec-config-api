@@ -18,7 +18,7 @@ public interface ModConfig<C extends ModConfig<C>> {
         return Type.createCodec(latestVersion, getType).dispatch("version", ModConfig::type, Type::codec);
     }
 
-    record Type<C extends ModConfig<C>, T extends C>(int version, Codec<? extends T> codec) {
+    record Type<C extends ModConfig<C>, T extends ModConfig<C>>(int version, Codec<? extends T> codec) {
         public static <C extends ModConfig<C>> Codec<Type<C, ?>> createCodec(int latestVersion, IntFunction<Type<C, ?>> getType) {
             return Codec.intRange(1, latestVersion).xmap(getType::apply, Type::version);
         }
