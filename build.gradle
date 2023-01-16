@@ -46,11 +46,19 @@ jar {
 // Configure the Maven publication
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        gpr(MavenPublication) {
             from components.java
         }
     }
 
     repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/mschae23/codec-config-api")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
