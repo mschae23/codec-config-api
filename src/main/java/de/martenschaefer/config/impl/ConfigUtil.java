@@ -83,7 +83,8 @@ public final class ConfigUtil {
                 latestConfig = config.latest();
 
                 if (config.shouldUpdate() && config.version() < latestVersion) {
-                    try (OutputStream output = Files.newOutputStream(configPath, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+                    // Default OpenOptions are CREATE, TRUNCATE_EXISTING, and WRITE
+                    try (OutputStream output = Files.newOutputStream(configPath);
                          OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(output))) {
                         logInfo.accept("Writing updated config.");
 
@@ -100,7 +101,7 @@ public final class ConfigUtil {
                 logError.accept(e.getLocalizedMessage());
             }
         } else {
-            try (OutputStream output = Files.newOutputStream(configPath, StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
+            try (OutputStream output = Files.newOutputStream(configPath, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
                  OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(output))) {
                 logInfo.accept("Writing default config.");
 

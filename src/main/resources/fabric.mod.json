@@ -3,8 +3,8 @@
   "id": "codec-config-api",
   "version": "${version}",
 
-  "name": "Codec Config API",
-  "description": "Config API using Codecs",
+  "name": "Codec config API",
+  "description": "Config API using codecs",
   "authors": [
     "mschae23"
   ],
@@ -23,7 +23,7 @@
 
   "depends": {
     "fabricloader": ">=0.14.6",
-    "minecraft": ">=1.19",
+    "minecraft": "*",
     "java": ">=17"
   },
   "suggests": {
