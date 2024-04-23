@@ -1,4 +1,23 @@
-package de.martenschaefer.config.impl;
+/*
+ * Copyright (C) 2024  mschae23
+ *
+ * This file is part of Codec config API.
+ *
+ * Codec config API is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package de.mschae23.config.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,17 +31,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import net.fabricmc.loader.api.FabricLoader;
-import de.martenschaefer.config.api.ModConfig;
-import de.martenschaefer.config.api.exception.ConfigException;
+import de.mschae23.config.api.ModConfig;
+import de.mschae23.config.api.exception.ConfigException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -33,42 +49,21 @@ public final class ConfigUtil {
     private ConfigUtil() {
     }
 
-    @SuppressWarnings("deprecation")
     public static <C extends ModConfig<C>> ModConfig<C> decodeConfig(InputStream input, Codec<ModConfig<C>> codec, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
         try (InputStreamReader reader = new InputStreamReader(new BufferedInputStream(input))) {
-            JsonElement element = new JsonParser().parse(reader); // Using this for 1.17 compatibility, would be JsonReader.parseReader in 1.18+
+            JsonElement element = JsonParser.parseReader(reader);
 
-            Either<ModConfig<C>, DataResult.PartialResult<ModConfig<C>>> result = codec.parse(ops, element).get();
-
-            return result.map(Function.identity(), partialResult -> {
-                throw new RuntimeException(new ConfigException("Error decoding config: " + partialResult.message()));
-            });
-        } catch (RuntimeException e) {
-            if (e.getCause() instanceof ConfigException configException) {
-                throw configException;
-            } else {
-                throw e;
-            }
+            return codec.parse(ops, element).getOrThrow(message ->
+                new ConfigException("Error decoding config: " + message));
         }
     }
 
     public static <C extends ModConfig<C>> void encodeConfig(Writer writer, Codec<ModConfig<C>> codec, ModConfig<C> config, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
-        try {
-            DataResult<JsonElement> result = codec.encodeStart(ops, config);
+        JsonElement element = codec.encodeStart(ops, config).getOrThrow(message ->
+            new ConfigException("Error encoding config: " + message));
 
-            JsonElement element = result.get().map(Function.identity(), partialResult -> {
-                throw new RuntimeException(new ConfigException("Error encoding config: " + partialResult.message()));
-            });
-
-            String json = GSON.toJson(element);
-            writer.append(json);
-        } catch (RuntimeException e) {
-            if (e.getCause() instanceof ConfigException configException) {
-                throw configException;
-            } else {
-                throw e;
-            }
-        }
+        String json = GSON.toJson(element);
+        writer.append(json);
     }
 
     public static <C extends ModConfig<C>> C initializeConfig(Path configName, int latestVersion, C latestDefault, Codec<ModConfig<C>> codec, DynamicOps<JsonElement> ops, Consumer<String> logInfo, Consumer<String> logError) {

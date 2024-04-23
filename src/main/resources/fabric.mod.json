@@ -11,7 +11,7 @@
   "contact": {
   },
 
-  "license": "MIT License",
+  "license": "LGPL-3.0-or-later",
   "icon": "assets/codec-config-api/icon.png",
 
   "environment": "*",
@@ -23,8 +23,7 @@
 
   "depends": {
     "fabricloader": ">=0.14.6",
-    "minecraft": "*",
-    "java": ">=17"
+    "minecraft": "*"
   },
   "suggests": {
   }

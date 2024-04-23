@@ -1,8 +1,8 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "de.martenschaefer.config.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "package": "de.mschae23.config.mixin",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
   "client": [
