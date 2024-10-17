@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -11,6 +11,9 @@ version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 repositories {
+    maven {
+        url = uri('https://mschae23.de/git/api/packages/mschae23/maven')
+    }
 }
 
 dependencies {
@@ -47,18 +50,32 @@ jar {
 // Configure the Maven publication
 publishing {
     publications {
-        gpr(MavenPublication) {
+        mod(MavenPublication) {
             from components.java
         }
     }
 
     repositories {
         maven {
+            name = "Forgejo"
+            url = uri("https://mschae23.de/git/api/packages/mschae23/maven")
+
+            credentials(HttpHeaderCredentials) {
+                name = "Authorization"
+                value = "token ${System.getenv("FORGEJO_PACKAGES_TOKEN")}"
+            }
+
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+
+        maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mschae23/codec-config-api")
+            url = uri('https://maven.pkg.github.com/mschae23/codec-config-api')
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                username = project.findProperty('gpr.user') ?: System.getenv('GITHUB_USERNAME')
+                password = project.findProperty('gpr.key') ?: System.getenv('GITHUB_TOKEN')
             }
         }
     }
