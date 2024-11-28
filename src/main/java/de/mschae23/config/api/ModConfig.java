@@ -31,6 +31,7 @@ import com.mojang.serialization.MapCodec;
 public interface ModConfig<C extends ModConfig<C>> {
     /**
      * Returns the {@link ModConfig.Type} for this config's version.
+     *
      * @return the {@code Type} instance
      */
     Type<C, ?> type();
@@ -59,9 +60,9 @@ public interface ModConfig<C extends ModConfig<C>> {
      * to decide which {@code ModConfig} type to deserialize into, using {@code getType}.
      *
      * @param latestVersion the latest config version
-     * @param getType a function that returns a {@code Type<C, ?>} instance based on the config version
+     * @param getType       a function that returns a {@code Type<C, ?>} instance based on the config version
+     * @param <C>           the config type with version {@code latestVersion}
      * @return the created {@code Codec}
-     * @param <C> the config type with version {@code latestVersion}
      */
     static <C extends ModConfig<C>> Codec<ModConfig<C>> createCodec(int latestVersion, IntFunction<Type<C, ?>> getType) {
         return Type.createCodec(latestVersion, getType).dispatch("version", ModConfig::type, Type::codec);
@@ -72,9 +73,9 @@ public interface ModConfig<C extends ModConfig<C>> {
      * of this per config version.
      *
      * @param version the config version
-     * @param codec the {@code MapCodec} used to serialize and deserialize configs in this version
-     * @param <C> the config type with the latest version
-     * @param <T> the config type with version {@code version}
+     * @param codec   the {@code MapCodec} used to serialize and deserialize configs in this version
+     * @param <C>     the config type with the latest version
+     * @param <T>     the config type with version {@code version}
      */
     record Type<C extends ModConfig<C>, T extends ModConfig<C>>(int version, MapCodec<? extends T> codec) {
         /**
@@ -83,9 +84,9 @@ public interface ModConfig<C extends ModConfig<C>> {
          * {@code getType} parameter will be called with this integer on deserialization.
          *
          * @param latestVersion the latest config version
-         * @param getType a function that returns a {@code Type<C, ?>} instance based on the config version
+         * @param getType       a function that returns a {@code Type<C, ?>} instance based on the config version
+         * @param <C>           the config type with version {@code latestVersion}
          * @return the created {@code Codec}
-         * @param <C> the config type with version {@code latestVersion}
          */
         public static <C extends ModConfig<C>> Codec<Type<C, ?>> createCodec(int latestVersion, IntFunction<Type<C, ?>> getType) {
             return Codec.intRange(1, latestVersion).xmap(getType::apply, Type::version);

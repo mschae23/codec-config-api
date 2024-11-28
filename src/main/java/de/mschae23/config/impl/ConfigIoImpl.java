@@ -43,13 +43,13 @@ import com.mojang.serialization.DynamicOps;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class ConfigUtil {
+public final class ConfigIoImpl {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    private ConfigUtil() {
+    private ConfigIoImpl() {
     }
 
-    public static <C extends ModConfig<C>> ModConfig<C> decodeConfig(InputStream input, Codec<ModConfig<C>> codec, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
+    public static <C> C decodeConfig(InputStream input, Codec<C> codec, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
         try (InputStreamReader reader = new InputStreamReader(new BufferedInputStream(input))) {
             JsonElement element = JsonParser.parseReader(reader);
 
@@ -58,7 +58,7 @@ public final class ConfigUtil {
         }
     }
 
-    public static <C extends ModConfig<C>> void encodeConfig(Writer writer, Codec<ModConfig<C>> codec, ModConfig<C> config, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
+    public static <C> void encodeConfig(Writer writer, Codec<C> codec, C config, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
         JsonElement element = codec.encodeStart(ops, config).getOrThrow(message ->
             new ConfigException("Error encoding config: " + message));
 
