@@ -106,7 +106,7 @@ public final class ConfigIo {
 
     /**
      * <p>If the config file is present, this method will read and decode it. If successful, this config will be returned.
-     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion},
+     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion}),
      * an updated version will be encoded and written to the file.</p>
      *
      * <p>If the config file does not exist, {@code latestDefault} will be encoded and written to the file if possible.
@@ -126,7 +126,7 @@ public final class ConfigIo {
 
     /**
      * <p>If the config file is present, this method will read and decode it. If successful, this config will be returned.
-     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion},
+     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion}),
      * an updated version will be encoded and written to the file.</p>
      *
      * <p>If the config file does not exist, {@code latestDefault} will be encoded and written to the file if possible.
@@ -147,7 +147,7 @@ public final class ConfigIo {
 
     /**
      * <p>If the config file is present, this method will read and decode it. If successful, this config will be returned.
-     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion},
+     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion}),
      * an updated version will be encoded and written to the file.</p>
      *
      * <p>If the config file does not exist, {@code latestDefault} will be encoded and written to the file if possible.
@@ -168,7 +168,7 @@ public final class ConfigIo {
 
     /**
      * <p>If the config file is present, this method will read and decode it. If successful, this config will be returned.
-     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion},
+     * In the case that the decoded config file is outdated (uses a version which is lower than {@code latestVersion}),
      * an updated version will be encoded and written to the file.</p>
      *
      * <p>If the config file does not exist, {@code latestDefault} will be encoded and written to the file if possible.

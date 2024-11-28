@@ -95,7 +95,8 @@ public final class ConfigUtil {
             } catch (ConfigException e) {
                 logError.accept(e.getLocalizedMessage());
             }
-        } else {
+        } else if (latestVersion != -1) {
+            // Write default config if the file doesn't exist, unless latestVersion was set to -1
             try (OutputStream output = Files.newOutputStream(configPath, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
                  OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(output))) {
                 logInfo.accept("Writing default config.");
