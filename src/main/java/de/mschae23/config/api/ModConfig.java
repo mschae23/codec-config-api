@@ -65,7 +65,7 @@ public interface ModConfig<C extends ModConfig<C>> {
      * @return the created {@code Codec}
      */
     static <C extends ModConfig<C>> Codec<ModConfig<C>> createCodec(int latestVersion, IntFunction<Type<C, ?>> getType) {
-        return Type.createCodec(latestVersion, getType).dispatch("version", ModConfig::type, Type::codec);
+        return Type.createCodec(latestVersion, getType).dispatch("version", ModConfig::type, type -> type.codec().codec());
     }
 
     /**

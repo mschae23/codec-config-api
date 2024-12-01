@@ -32,14 +32,16 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import net.fabricmc.loader.api.FabricLoader;
-import de.mschae23.config.api.ModConfig;
-import de.mschae23.config.api.exception.ConfigException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import de.mschae23.config.api.ModConfig;
+import de.mschae23.config.api.exception.ConfigException;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -53,16 +55,24 @@ public final class ConfigIoImpl {
         try (InputStreamReader reader = new InputStreamReader(new BufferedInputStream(input))) {
             JsonElement element = JsonParser.parseReader(reader);
 
-            return codec.parse(ops, element).getOrThrow(message ->
-                new ConfigException("Error decoding config: " + message));
+            Either<C, DataResult.PartialResult<C>> result = codec.parse(ops, element).get();
+
+            if (result.left().isEmpty() || result.right().isPresent()) {
+                throw new ConfigException("Error decoding config: " + result.right().get().message());
+            }
+
+            return result.left().get();
         }
     }
 
     public static <C> void encodeConfig(Writer writer, Codec<C> codec, C config, DynamicOps<JsonElement> ops) throws IOException, ConfigException {
-        JsonElement element = codec.encodeStart(ops, config).getOrThrow(message ->
-            new ConfigException("Error encoding config: " + message));
+        Either<JsonElement, DataResult.PartialResult<JsonElement>> result = codec.encodeStart(ops, config).get();
 
-        String json = GSON.toJson(element);
+        if (result.left().isEmpty() || result.right().isPresent()) {
+            throw new ConfigException("Error encoding config: " + result.right().get().message());
+        }
+
+        String json = GSON.toJson(result.left().get());
         writer.append(json);
     }
 
