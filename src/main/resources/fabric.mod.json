@@ -26,5 +26,13 @@
     "minecraft": "*"
   },
   "suggests": {
+  },
+
+  "custom": {
+    "modmenu": {
+      "badges": [
+        "library"
+      ]
+    }
   }
 }
