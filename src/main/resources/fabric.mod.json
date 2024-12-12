@@ -9,6 +9,9 @@
     "mschae23"
   ],
   "contact": {
+    "homepage": "https://mschae23.de/git/mschae23/codec-config-api",
+    "sources": "https://mschae23.de/git/mschae23/codec-config-api",
+    "issues": "https://github.com/mschae23/codec-config-api/issues"
   },
 
   "license": "LGPL-3.0-or-later",
