@@ -32,14 +32,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import net.fabricmc.loader.api.FabricLoader;
-import de.mschae23.config.api.ModConfig;
-import de.mschae23.config.api.exception.ConfigException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
+import de.mschae23.config.api.ModConfig;
+import de.mschae23.config.api.exception.ConfigException;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal

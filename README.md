@@ -7,7 +7,7 @@ Add the Maven repository to the `repositories` block near the top of your `build
 repositories {
     // ...
     maven {
-        url = uri('https://mschae23.de/git/api/packages/mschae23/maven')
+        url = uri('https://code.mschae23.de/api/packages/mschae23/maven')
     }
 }
 ```
@@ -22,7 +22,7 @@ dependencies {
 ```
 
 Define the `codec_config_api_version` key in `gradle.properties` to set the version. See [the list of published
-versions](https://mschae23.de/git/mschae23/-/packages/maven/de.mschae23-codec-config-api/versions). You can usually
+versions](https://code.mschae23.de/mschae23/-/packages/maven/de.mschae23-codec-config-api/versions). You can usually
 just use the newest one, disregarding Minecraft version, because the library doesn't break often.
 
 ## License
